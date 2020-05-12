@@ -3,7 +3,7 @@
 #Starts tcpdump and tshark sniff script in background process
 ./sniff.sh &
 #Guarda a posição real de processamento dos pacotes (mesmo quando leitura é resetada, só começará a computação a partir deste indice global)
-dump_file=./logs/streams.csv
+dump_file=./logs/brute_streams.csv
 global_count=0
 #Seta um loop infinito para que o arquivo, que é variável, seja sempre lido mesmo quando foram lidas todas as linhas
 while true;do
@@ -21,15 +21,17 @@ while true;do
                 if [ -z $col_udp ]; then ((global_count++)); #if neither tcp or udp
                 else 
                     ((global_count++));
-                    echo $line >> "./udp_csvs/udp_stream_"$col_udp".csv"; 
+                    echo $line >> "./logs/udp_csvs/udp_stream_"$col_udp".csv"; 
                 fi
             else 
                 ((global_count++));
-                echo $line >> "./tcp_csvs/tcp_stream_"$col_tcp".csv";
+                echo $line >> "./logs/tcp_csvs/tcp_stream_"$col_tcp".csv";
                 #Verificação de término de stream para enviar o arquivo para verificação com modelo de machine learning
                 col_fin=$(echo $line | cut -d ',' -f 14); #store space of tcp.flags of packages
                 if [[ $col_fin == '0x00000011' ]];then #if the tcp.flags is a fin flag (finish mesage)
-                    echo "$col_tcp $(python3 ./handler.py './tcp_csvs/tcp_stream_'$col_tcp'.csv' 'tcp')" >> ./logs/ataqs.csv
+                    analisys=$(echo "Stream $col_tcp $(python3 ./handler.py './logs/tcp_csvs/tcp_stream_'$col_tcp'.csv' 'tcp')")
+                    echo $analisys >> ./logs/analisys.log
+                    echo -ne "\n$analisys\n"
                 fi
             fi
         fi

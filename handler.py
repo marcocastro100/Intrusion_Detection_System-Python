@@ -321,8 +321,21 @@ def ML_preprocess(data):
     return(data)
 #==================================================================================================================
 #Simple predict with the data and the model imported
-def Predict_train(data,trained_model):
-    prediction = trained_model.predict(data) #run model with data
+def Predict_train(streams_dataframe_ml):
+    class bcolors:
+        HEADER = '\033[95m'
+        OKBLUE = '\033[94m'
+        OKGREEN = '\033[92m'
+        WARNING = '\033[93m'
+        FAIL = '\033[91m'
+        ENDC = '\033[0m'
+        BOLD = '\033[1m'
+        UNDERLINE = '\033[4m'
+#     print(bcolors.FAIL + "Warning: No active frommets remain. Continue?" + bcolors.ENDC)
+    trained_model = pickle.load(open('./trained_model.sav','rb')) #import model from a file
+    prediction = trained_model.predict(streams_dataframe_ml) #run model with 1 line dataframe
+    if(prediction == 1):print(sys.argv[2],' stream ',sys.argv[3],bcolors.FAIL + 'Intrusion Detected!' + bcolors.ENDC)
+    elif (prediction == 0):print(sys.argv[2],' stream ',sys.argv[3],bcolors.OKGREEN + 'Normal Connection' + bcolors.ENDC)
     return(prediction)
 #==================================================================================================================
 
@@ -330,8 +343,6 @@ stream = import_data(sys.argv[1]) #import single stream
 series_processed = process_data(stream) #generate features
 streams_dataframe = store_data(series_processed) #create dataset with new features
 streams_dataframe_ml = ML_preprocess(streams_dataframe) #string to int for ml model understand
-
-trained_model = pickle.load(open('./trained_model.sav','rb')) #import model from a file
-prediction = trained_model.predict(streams_dataframe_ml) #Predict if the stream imported is an attack or normal conection
-if(prediction == 1):print('An attack is likely to have ocurred! verify network logs')
-elif (prediction == 0):print('not atack')
+del streams_dataframe_ml['length']
+del streams_dataframe_ml['window_size']
+prediction = Predict_train(streams_dataframe_ml) #result of ml model
