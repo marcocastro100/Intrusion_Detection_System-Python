@@ -1,3 +1,9 @@
+import os
+import sys #Working with OS
+import pickle #Importation and exportation of models
+import pandas as pd
+import numpy as np
+
 #==================================================================================================================
 def Duration(current_dataframe):
     first_relative_time = float(current_dataframe.iloc[0]["relative_time"]); #Tempo relativo da primeira linha
@@ -188,3 +194,4 @@ def Srvcount(current_dataframe):
                 if(current_dataframe.iloc[line_count].ip_src != current_dataframe.iloc[line_count].ip_dst):srv_diff_host_rate+= 1
         else: start_time2 = sec; end_time2 = sec+2
     return(count,srv_count,serror_rate,srv_serror_rate,rerror_rate,srv_rerror_rate,same_srv_rate,diff_srv_rate,srv_diff_host_rate)
+#==================================================================================================================

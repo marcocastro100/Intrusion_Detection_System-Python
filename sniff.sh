@@ -1,7 +1,7 @@
 #! /bin/bash
 #SNIFF.SH
 #Deletion of old folders
-./free_ram_memory.sh
+#./free_ram_memory.sh
 sudo rm -r logs
 #Creates necessary folders IF they not exists already
 if [ ! -e ./logs ];then mkdir logs; fi
