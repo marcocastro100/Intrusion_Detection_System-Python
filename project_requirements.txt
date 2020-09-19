@@ -1,0 +1,7 @@
+python.pickles=4.0
+python.pandas=1.0.3
+python.numpy=1.18.2
+python.scikit-learn=0.22.2
+tcpdump=4.9.3
+tshark=2.6.8
+python=3.7.3
