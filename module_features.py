@@ -89,6 +89,7 @@ class Processor_features:
     def Protocol(self,package_list):
         if(package_list[0].protocol_type == 6):return('TCP');
         elif(package_list[0].protocol_type == 17):return('UDP');
+        elif(package_list[0].protocol_type == 1):return('ICMP');
         else:return('None');
         
     def Len_win_urg_clas(self,package_list):

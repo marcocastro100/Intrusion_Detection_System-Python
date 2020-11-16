@@ -1,6 +1,8 @@
 import time
 import pandas as pd
 from module_features import Processor_features
+from module_common import Features_names
+
 class Processor_stream:
     def __init__(self,package):
         self.last_modified = int(time.time()); #Controls when the last action of the stream has been seened
@@ -56,11 +58,7 @@ class Processor_stream:
         self.features.append(self.same_srv_rate)
         self.features.append(self.diff_srv_rate)
         self.features.append(self.srv_diff_host_rate)
-        self.features.append(classe) #normal or attack. or NaN in the case of not training a model
-        features_names=['duration','src_bytes','dst_bytes','land','flag','service','protocol_type',
-                 'length','window_size','urgent','counts','srv_count','serror_rate','srv_serror_rate',
-                 'rerror_rate','srv_rerror_rate','same_srv_rate','diff_srv_rate','srv_diff_host_rate','classe']
-        #Creates a one row dataframe with the list of the features generated, and index column with the features names
-        features_dataframe = pd.DataFrame([self.features],columns = features_names)
+        self.features.append('1' if(classe == '1' or classe =='3') else '2') #normal or attack. or NaN in the case of not training a model
+        features_dataframe = pd.DataFrame([self.features],columns = Features_names)
         return(features_dataframe);
 #=================================================================================

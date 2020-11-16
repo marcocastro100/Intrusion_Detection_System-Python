@@ -1,6 +1,11 @@
 #Common functions used by various modules at the time (create to not have multiple dependencies between modules)
 from module_package import Processor_package
 
+#ML Features that will be generated for machine learning algorithms analisys
+Features_names=['duration','src_bytes','dst_bytes','land','flag','service','protocol_type',
+         'length','window_size','urgent','counts','srv_count','serror_rate','srv_serror_rate',
+         'rerror_rate','srv_rerror_rate','same_srv_rate','diff_srv_rate','srv_diff_host_rate','classe']; 
+
 #Reads a file (localized in path on SO) containing network packages in csv format and return the readed lines
 def Read_file(path):
     with open (path, 'r') as file:

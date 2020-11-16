@@ -5,6 +5,9 @@ import sys #Deal with arguments passed to the script
 import subprocess #Calls for the sniff program
 from shutil import copyfile
 import time
+#Ignore warning mesages (old versions)
+import warnings
+warnings.filterwarnings("ignore")
 
 def Run():
     subprocess.Popen(['./module_shell.sh sniff'], shell=True);time.sleep(3) #starts tcpdump package sniff process

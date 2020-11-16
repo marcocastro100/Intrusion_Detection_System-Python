@@ -16,7 +16,7 @@ class Processor_package:
                 self.dst_port = int(package[11]);
                 self.window_size = int(package[9]);
                 self.urgent = int(package[6]);
-            elif(self.protocol_type == 17):
+            elif(self.protocol_type == 17 or self.protocol_type == 1):
                 self.stream = int(package[1]);
                 self.src_port = int(package[12]);
                 self.dst_port = int(package[13]);
@@ -31,7 +31,7 @@ class Processor_package:
         raw_packages = [aux.split(',') for aux in file_lines] #Stores the pkg attributes (that are divided by a ',')
         for single_package in range(0,len(raw_packages)): #len(lines) == quantity of packages readed from file_lines
             if(len(raw_packages[single_package]) == 16): #checks if the package was captured fully or parcialy (try-catch)
-                if(raw_packages[single_package][3] == '6' or raw_packages[single_package][3] == '17'):#tcp or udp (try-catch)
+                if(raw_packages[single_package][3] == '6' or raw_packages[single_package][3] == '17' or raw_packages[single_package][3] == '1'):#tcp or udp (try-catch)
                     if(raw_packages[single_package][0] != '' or raw_packages[single_package][1] != ''): #if has a stream number
                         obj_package = Processor_package(raw_packages[single_package]) #Instatiate the package
                         assembled_packages.append(obj_package);
