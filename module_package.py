@@ -1,5 +1,5 @@
 class Processor_package:
-    #receives a package (dump line) as parameter, but in the case that the instance has been made just to assemble various lines of packages, then no parameter should be given, and a package will be made with zero's; (this way just to take the assemble_packages out of the common.py
+    #receives a package (dump line) as parameter, but in the case that the instance has been made just to call for Assemble_packages, then no parameter should be given, and a package will be made with zero's;
     def __init__(self,package=[0]*16):
         try:
             self.relative_time = float(package[2])
@@ -16,7 +16,7 @@ class Processor_package:
                 self.dst_port = int(package[11]);
                 self.window_size = int(package[9]);
                 self.urgent = int(package[6]);
-            elif(self.protocol_type == 17 or self.protocol_type == 1):
+            elif(self.protocol_type == 17):
                 self.stream = int(package[1]);
                 self.src_port = int(package[12]);
                 self.dst_port = int(package[13]);
@@ -29,12 +29,12 @@ class Processor_package:
     def Assemble_packages(self,file_lines):
         assembled_packages = []
         raw_packages = [aux.split(',') for aux in file_lines] #Stores the pkg attributes (that are divided by a ',')
-        for single_package in range(0,len(raw_packages)): #len(lines) == quantity of packages readed from file_lines
+        for single_package in range(0,len(raw_packages)): #len(raw_packages) == quantity of packages readed from file_lines
             if(len(raw_packages[single_package]) == 16): #checks if the package was captured fully or parcialy (try-catch)
-                if(raw_packages[single_package][3] == '6' or raw_packages[single_package][3] == '17' or raw_packages[single_package][3] == '1'):#tcp or udp (try-catch)
-                    if(raw_packages[single_package][0] != '' or raw_packages[single_package][1] != ''): #if has a stream number
-                        obj_package = Processor_package(raw_packages[single_package]) #Instatiate the package
-                        assembled_packages.append(obj_package);
+                if(raw_packages[single_package][3] == '6' or raw_packages[single_package][3] == '17'):#tcp or udp (try-catch)
+                    if(raw_packages[single_package][0] != '' or raw_packages[single_package][1] != ''): #if has a stream number (try-catch)
+                        obj_package_class = Processor_package(raw_packages[single_package]) #Instatiate the package with __init__
+                        assembled_packages.append(obj_package_class);
             else:
                 print('smaller package size:',len(raw_packages[single_package]));
         return(assembled_packages);

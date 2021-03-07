@@ -25,6 +25,7 @@ build_streams() {
     fi
 }
 #===================================================#===================================================
+#Generates a file containing the number of streams in that part of the dataset (necessary for looping)
 build_max(){
     for week in '1' '2' '3'; do
         for protocol in 'tcp' 'udp' 'icmp'; do #2 protocols that we are working on
@@ -72,9 +73,9 @@ setup() { #setup the enviroment for the system
 }
 #=======================================================#===================================================
 sniff() { #Sniff the network and records the data in a csv file in ids/logs/dump*
-    sudo rm -r logs
-    if [ ! -e ./logs ];then mkdir logs; fi
-    sudo tcpdump -q -w ./logs/network_dump.pcap tcp or udp |
+    # sudo rm -r logs
+    if [ ! -e ./logs ];then mkdir logs; fi #Creates a logs directory for register
+    #sudo tcpdump -q -w ./logs/network_dump.pcap tcp or udp or icmp|
     sudo tshark -q -T fields -e tcp.stream -e udp.stream -e frame.time_relative -e ip.proto -e _ws.col.Protocol -e tcp.flags -e tcp.urgent_pointer -e frame.cap_len  -e ip.flags -e tcp.window_size_value -e tcp.srcport -e tcp.dstport -e udp.srcport -e udp.dstport -e ip.src -e ip.dst -E header=n -E separator=, -E occurrence=f > ./logs/brute_streams.csv 
 }
 #=======================================================#===================================================

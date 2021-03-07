@@ -37,4 +37,4 @@ def Print_prediction(prediction,stream,normal_anomaly_count,classe='0'):
               str(stream.protocol)+' stream '+str(stream.index)+
               col.WARNING+' \tAnomaly Connection\t '+col.ENDC+'('+
               col.OKGREEN+str(normal_anomaly_count[0])+' '+col.WARNING+str(normal_anomaly_count[1])+col.ENDC+')\t');
-        with open('./logs/anomaly.txt','a') as file: file.write(str(stream.index)+'\n'); file.close() #writes anomaly in a file
+        with open('./logs/anomaly.txt','a') as file: file.write(str(stream)+'\n'); file.close() #writes anomaly in a file

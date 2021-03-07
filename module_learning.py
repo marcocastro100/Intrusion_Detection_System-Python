@@ -60,7 +60,8 @@ class Processor_learning:
         self.Save_model(best_model,round(best_score,2)); #send the trained model to be saved in a file and be used on sniffing
         
     def Preprocess_data(data,dataframe):
-        from sklearn.preprocessing import LabelEncoder;le = LabelEncoder() #Literal to int
+        from sklearn.preprocessing import LabelEncoder;
+        le = LabelEncoder() #Literal to int
         dataframe.flag = le.fit_transform(dataframe.flag);
         dataframe.service = le.fit_transform(dataframe.service);
         dataframe.protocol_type = le.fit_transform(dataframe.protocol_type);
@@ -79,7 +80,7 @@ class Processor_learning:
     def Predict_data(self,stream_dataframe):
         current_protocol = stream_dataframe.protocol_type[0].lower(); #Defines a string protocol for loading the right model (tcp,udp or icmp)
         stream_dataframe = self.Preprocess_data(stream_dataframe);
-        model = self.Load_model('./models/model_3_'+current_protocol+'_inside.sav'); #loads the ml model to the program (alter in self.attributes)
-        stream_dataframe = stream_dataframe.drop(columns = 'classe'); #drops classe since data hasnt label
+        model = self.Load_model('./models/model_3_'+current_protocol+'_inside.sav'); #loads the ml model to the program
+        stream_dataframe = stream_dataframe.drop(columns = 'classe'); #drops classe since sniffed data dont have a classe yet
         data_prediction = model.predict(stream_dataframe); #prediction normal vs attack
         return(int(data_prediction));

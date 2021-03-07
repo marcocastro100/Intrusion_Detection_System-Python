@@ -120,29 +120,32 @@ class Processor_features:
         srv_serror_rate = 0 #srv_serror_rate feature
         srv_rerror_rate = 0 #srv_rerror_rate feature
         srv_diff_host_rate = 0 #srv_diff_host_rate feature
-
-        for count in range(0,len(package_list)):
-            if(package_list[count].ip_src == self.source): #veirfy if this package is from source
-                current_pkg_time = package_list[count].relative_time; #holds the time that the package arrived
-                if (current_pkg_time >= start_time1 and current_pkg_time <= end_time1): #veify if the difference from last is 2
-                    feat_count += 1; #Count
-                    if(package_list[count].flag == 'SYN'): #current package
-                        if(package_list[count+1].flag == 'RST'):rerror_rate += 1 #next package (count+1)
-                        elif(package_list[count+1].flag != 'SYN-ACK'):serror_rate += 1 
-                    if(package_list[count].src_port == package_list[count].dst_port):same_srv_rate+=1
-                    else:diff_srv_rate += 1
-                else: start_time1 = current_pkg_time; end_time1 = current_pkg_time+2; #Case not in the 2 seconds window
-            #SrvCount
-            current_pkg_time = int((package_list[count].relative_time))
-            if(current_pkg_time >= start_time2 and current_pkg_time <= end_time2): 
-                if (package_list[count].src_port == package_list[count].dst_port):
-                    srv_count += 1;
-                    if(package_list[count].flag == 'SYN'): #Erros syn e Rej:
-                        if(package_list[count+1].flag == 'RST'):srv_rerror_rate += 1
-                        elif(package_list[count+1].flag != 'SYN-ACK'):srv_serror_rate += 1 
-                    if(package_list[count].ip_src != package_list[count].ip_dst):srv_diff_host_rate+= 1
-            else: start_time2 = current_pkg_time; end_time2 = current_pkg_time+2
-            return(count,srv_count,serror_rate,srv_serror_rate,rerror_rate,srv_rerror_rate,same_srv_rate,diff_srv_rate,srv_diff_host_rate)
+        try:
+            for count in range(0,len(package_list)):
+                if(package_list[count].ip_src == self.source): #veirfy if this package is from source
+                    current_pkg_time = package_list[count].relative_time; #holds the time that the package arrived
+                    if (current_pkg_time >= start_time1 and current_pkg_time <= end_time1): #veify if the difference from last is 2
+                        feat_count += 1; #Count
+                        if(package_list[count].flag == 'SYN'): #current package
+                            if(package_list[count+1].flag == 'RST'):rerror_rate += 1 #next package (count+1)
+                            elif(package_list[count+1].flag != 'SYN-ACK'):serror_rate += 1 
+                        if(package_list[count].src_port == package_list[count].dst_port):same_srv_rate+=1
+                        else:diff_srv_rate += 1
+                    else: start_time1 = current_pkg_time; end_time1 = current_pkg_time+2; #Case not in the 2 seconds window
+                #SrvCount
+                current_pkg_time = int((package_list[count].relative_time))
+                if(current_pkg_time >= start_time2 and current_pkg_time <= end_time2): 
+                    if (package_list[count].src_port == package_list[count].dst_port):
+                        srv_count += 1;
+                        if(package_list[count].flag == 'SYN'): #Erros syn e Rej:
+                            if(package_list[count+1].flag == 'RST'):srv_rerror_rate += 1
+                            elif(package_list[count+1].flag != 'SYN-ACK'):srv_serror_rate += 1 
+                        if(package_list[count].ip_src != package_list[count].ip_dst):srv_diff_host_rate+= 1
+                else: start_time2 = current_pkg_time; end_time2 = current_pkg_time+2
+        except:
+            pass;
+        
+        return(feat_count,srv_count,serror_rate,srv_serror_rate,rerror_rate,srv_rerror_rate,same_srv_rate,diff_srv_rate,srv_diff_host_rate)
 
 #=================================================================================
 
