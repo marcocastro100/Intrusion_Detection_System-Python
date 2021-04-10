@@ -35,8 +35,6 @@ class Processor_package:
                     if(raw_packages[single_package][0] != '' or raw_packages[single_package][1] != ''): #if has a stream number (try-catch)
                         obj_package_class = Processor_package(raw_packages[single_package]) #Instatiate the package with __init__
                         assembled_packages.append(obj_package_class);
-            else:
-                print('smaller package size:',len(raw_packages[single_package]));
         return(assembled_packages);
 
 

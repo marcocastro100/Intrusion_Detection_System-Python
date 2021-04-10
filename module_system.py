@@ -1,3 +1,4 @@
+
 #! /usr/bin/env python3
 from module_learning import Processor_learning;
 from module_package import Processor_package
@@ -9,7 +10,7 @@ import time #Used to calculate the time that a stream has not been active
 class System:
     #Settings system configuration
     path_new_pkgs = './logs/dump_read.csv'; #dump file from network live-time dump
-    max_hold_time = 1; #Max time without receiving packages that a stream can have before considered dead
+    max_hold_time = 5; #Max time without receiving packages that a stream can have before considered dead
 
     #Control structures
     normal_anomaly_count = [0,0]; #[0] = normal connections count. [1] anomaly connections count (output purpose)
@@ -31,10 +32,11 @@ class System:
     def Check_network(self):
         obj_package_class = Processor_package();
         lines = Read_file(self.path_new_pkgs); #lines receive the file content (COMMON.py)
-        lines = lines[(self.last_pkg_readed):len(lines)-1] #lines updated to only the packages not readed. Discosider the last line in case that one is not fully formated yet, read it int the next loop:
-        self.last_pkg_readed += (len(lines)-1) #update the last package readed
-        assembled_packages = obj_package_class.Assemble_packages(lines); #lines readed of the file tranformed into packages
-        self.Redirect_packages(assembled_packages); #send the packages to their corresponding streams
+        lines = lines[(self.last_pkg_readed):len(lines)] #lines updated to only the packages not readed. Discosider the last line in case that one is not fully formated yet, read it int the next loop:
+        if(len(lines)>=1):
+            self.last_pkg_readed += (len(lines)) #update the last package readed
+            assembled_packages = obj_package_class.Assemble_packages(lines); #lines readed of the file tranformed into packages
+            self.Redirect_packages(assembled_packages); #send the packages to their corresponding streams
     
     #Insert a list of packages passed by parameter into the corresponding stream
     def Redirect_packages(self,assembled_packages_list):

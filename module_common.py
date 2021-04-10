@@ -9,6 +9,7 @@ Features_names=['duration','src_bytes','dst_bytes','land','flag','service','prot
 #Reads a file (localized in path on SO) containing network packages in csv format and return the readed lines
 def Read_file(path):
     with open (path, 'r') as file:
+        file.flush();
         lines = file.readlines(); #Read lines on the file passed as parameter
         file.close() #closes the file
         return(lines);
