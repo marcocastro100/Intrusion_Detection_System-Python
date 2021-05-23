@@ -225,7 +225,47 @@ def Predict_data(self,stream_dataframe):
     return(int(data_prediction));
 ```
     
-    
+    
+    
+    
+    
+<b>Resultados</b>    
+Com a base de dados utilizada para o treinamento do modelo de aprendizado de máquina, foram extraídos mais de 1.600.000 registros de conexões maliciosas e normais, sendo 66\% dos registros foram utilizados para fins de treinamento e 33\% para fins de validação do modelo utilizando a técnica de cross-validation.
+
+Diante da enorme quantidade de dados presentes no conjunto de dados, durante o processo de desenvolvimento das rotinas, ficou claro que era inviável o processamento de todo o conjunto de dados através do uso de computadores de uso geral, modelo que estava sendo utilizado até o momento. Isto se deve à grande quantidade de dados na base de dados demandar muito tempo e extrema requisição de processamento para que os algoritmos processem todas as entradas, assim foi utilizada uma máquina servidor que detém um hardware com melhores condições de processamento, contendo este hardware 47 processadores (Intel Xeon) e 128 Gigabytes de RAM, possibilitando assim a utilização de todo o conjunto de dados na geração do modelo de aprendizado de máquina com tempo médio de 5 dias para o processamento de toda a base pelos algoritmos.
+
+O resultado do treinamento foi um modelo de aprendizado de máquina com precisão de 76\% de acerto na identificação da natureza de uma conexão utilizando o algoritmo Random Forest.
+
+A fim aplicar do modelo de aprendizado de maquina criado e testar o sistema IDS proposto como todo, o sistema foi submetido a diversas simulações de ataques em redes, onde todo o trafego entre uma maquina atacante e a maquina alvo se deu através de uma rede isolada entre as duas máquinas, sendo totalmente analisada em tempo real pelo sistema IDS.
+
+Para isto, foram criada através de um software de virtualização (VirtualBox) os sistemas operacionais que simularam as máquinas atacante e alvo do ataque. A máquina Alvo (Linux Metasploitable - Ubuntu ) é uma distribuição Linux propositalmente projetada para ter falhas de segurança, tendo diversos vetores de exploração de ataques em rede.. A maquina Atacante (Linux Kali - Debian) é uma distribuição Linux com foco em facilitar processos de Pentest (Testes de Segurança).
+
+Com o software VirtualBox foi criada uma rede (Host-Only) onde o trafego de pacotes dentro da rede fosse limitado somente entre as maquinas virtuais e a maquina hospedeira para maior exatidão possível do processo. Para a realização efetiva dos ataques, na maquina atacante foi utilizado o sistema Metasploit que é um framework para desenvolvimento e disponibilização de exploits (Explorações) com o intuito de facilitar testes de Penetração em processos de Auditoria e segurança de sistemas e teste de sistemas IDS/IPS.
+
+Com o sistema IDS proposto já capturando os pacotes dentro da rede, foram executados diversos ataques que se encontram na rotina de módulos de exploração (scripts que exploram vulnerabilidades) do Metasploit Framework. A partir do momento que o processo de ataque começa, com o envio de pacotes TCP/UDP da maquina atacante para a máquina alvo, o sistema IDS realiza todo o processo visto neste documento, capturando pacote a pacote trafegando na rede, realizando engenharia reversa a fim de conectá-los logicamente para formar a própria conexão, analisando cada conexão para gerar as features, alimentando o modelo de aprendizado de maquina com as features, modelo este que compara a conexão capturada com suas regras internas geradas através do treinamento da base de ataques para finalmente realizar a predição da conexão, indicando de forma visual no terminal a natureza (Normal X Anomala) da conexão trafegada na rede.
+
+Uma exploração geralmente requer várias interações da máquina atacante com a máquina alvo, logo, várias conexõessão geradas em um único processo de exploração. O objetivo de um NIDS é conseguir classificar pelo menos uma, das possíveis milhares de conexões envolvidas em um processo de exploração, possibilitando assim a identificação de uma exploração ou tentativa de ataque via rede.
+
+Apesar de ter sido gerado através de uma base de dados relativamente antiga (DARPA99), o modelo proposto conseguiu realizar com sucesso a identificação de ataques recentes que se encontram no arsenal de módulos do Metasploit Framework, um framework recente amplamente utilizado por profissionais da área de segurança para comprometer a segurança de sistemas e explorar vulnerabilidades.
+
+Os ataques, scripts ou módulos Metasploit utilizados para a simulação se encontram listados abaixo, mais detalhes sobre o funcionamento deste por ser encontrada nas referencias do Common Vulnerabilities and Exposures (CVE), um Banco de dados de vulnerabilidades de segurança da informação conhecidas publicamente.
+
+
+\item auxiliary/scanner/http/ssl\_version ---  Poodle Attack Scanner\\ Mais Informações: https://cvedetails.com/cve/CVE-2014-3566/
+\item exploit/multi/samba/usermap\_script --- Exploração do serviço SAMBA\\ Mais Informações: https://cvedetails.com/cve/CVE-2007-2447/
+\item exploit/unix/ftp/vsftpd\_234\_backdoor --- Exploração de Servidor FTP
+\item exploit/unix/irc/unreal\_ircd\_3281\_backdoor --- Exploração do sistema Daemon de IRC\\ Mais Informações: https://cvedetails.com/cve/CVE-2010-2075/
+\item exploit/unix/misc/distcc\_exec --- Explora uma vulnerabilidade do distccd\\ Mais Informações: https://cvedetails.com/cve/CVE-2004-2687/
+\item exploit/multi/http/php\_cgi\_arg\_injection --- Explora o PHP quando em modo CGI\\ Mais informações: https://cvedetails.com/cve/CVE-2012-1823/
+\item exploit/linux/misc/drb\_remote\_codeexec ---Execução de codigo remota do dRuby
+\item auxiliary/dos/http/slowloris --- Ataque de negação de serviços web\\ Mais informações:  https://cvedetails.com/cve/CVE-2007-6750/\\https://cvedetails.com/cve/CVE-2010-2227/
+\item auxiliary/dos/http/metasploit\_httphandler\_dos --- Explora um servidor HTTP\\Mais informações:   https://cvedetails.com/cve/CVE-2019-5645/
+\item auxiliary/dos/smb/smb\_loris --- Negação de serviço através alocação de memória por requisições SMB
+
+
+
+
+
 
 <b> Especificações </b>
 <b>Features Utilizadas para treinamento e Analise das conexões:</b><p>
