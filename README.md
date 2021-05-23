@@ -1,8 +1,3 @@
-<b> Trabalho Científico Completo: <Link TCC></b>
-    
-
-
-
 <b> A Base de Dados Utilizada </b>
 Com o intuito de ser possível a criação de regras que possam identificar assinaturas ou padrões, presentes em quaisquer tipos de dados, é necessário que sejam pré-estabelecidos dados "parâmetros" que contenham os padrões desejados. Na questão do presente trabalho, que visa a identificação de conexões em rede que possam ter como objetivo a exploração de vulnerabilidades de um sistema via rede, foi escolhida uma base de dados contendo conexões de rede normais (sem a intenção de exploração de sistemas) e conexões que façam parte de ataques em redes.
 
